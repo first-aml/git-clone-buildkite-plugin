@@ -4,6 +4,8 @@ author: https://github.com/first-aml/
 requirements: []
 configuration:
   properties:
-    repository: 
+    repository:
+      type: string
+    branch:
       type: string
   additionalProperties: false

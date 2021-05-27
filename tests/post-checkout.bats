@@ -1,16 +1,35 @@
 #!/usr/bin/env bats
 
-load '/usr/local/lib/bats/load.bash'
+PROJECT_DIR=$(cd "${BATS_TEST_DIRNAME}/.." && pwd)
+
+load "$BATS_PATH/load.bash"
 
 @test "Echos repository" {
-  export respository="git@github.com:first-aml/git-clone-buildkite-plugin.git"
+  export BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY="git@github.com:first-aml/git-clone-buildkite-plugin.git"
 
-  stub git clone ${repository}
+  stub git "clone : echo ${BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY}"
 
-  run "$PWD/hooks/post-checkout"
-
-  unstub git
+  run "${PROJECT_DIR}/hooks/post-checkout"
 
   assert_success
   assert_output --partial "cloning repository git@github.com:first-aml/git-clone-buildkite-plugin.git"
+
+  unstub git
+
+
+}
+
+@test "Echos repository with branch" {
+  export BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY="git@github.com:first-aml/git-clone-buildkite-plugin.git"
+  export BUILDKITE_PLUGIN_GIT_CLONE_BRANCH="develop"
+
+  stub git "clone : "
+
+  run "${PROJECT_DIR}/hooks/post-checkout"
+
+  assert_success
+  assert_output --partial "cloning repository git@github.com:first-aml/git-clone-buildkite-plugin.git --branch develop"
+
+  unstub git
+
 }
