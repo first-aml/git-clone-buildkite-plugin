@@ -1,6 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "cloning repository ${BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY}"
+# Check for branch parameters
+branch=${BUILDKITE_PLUGIN_GIT_CLONE_BRANCH-""}
+BRANCH_PARAM=
+if [ ! -z ${branch} ]; then
+    BRANCH_PARAM="--branch ${branch}"
+fi
 
-git clone ${BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY}
+echo "cloning repository ${BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY} ${BRANCH_PARAM}"
+
+git clone ${BUILDKITE_PLUGIN_GIT_CLONE_REPOSITORY} ${BRANCH_PARAM}
